@@ -425,7 +425,8 @@ function enableCodePre() {
 })()
 initMUI()
 function initMUI() {
-    //UI初始化
+    //init UI icons for the default structure
+    //it will run when loaded.
     const buttons = {
         openlist: document.getElementById("button-openlist"),
         back: document.getElementById("button-back"),
@@ -1552,8 +1553,8 @@ class RouteLoader {
         for (const key in this.routeTable) {
             const match = hash.match(this.routeTable[key].regex)
             if (match) {
-                const params = match.slice(1, -1) // 提取路径中的参数
-                const query = this.parseQuery(match[match.length - 1]) // 解析 query
+                const params = match.slice(1, -1)
+                const query = this.parseQuery(match[match.length - 1])
                 this.change(key, params, query)
                 return
             }
