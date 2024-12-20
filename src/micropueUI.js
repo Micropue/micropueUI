@@ -243,36 +243,6 @@ class PageLoader {
     }
 }
 
-class HideOnText {
-    constructor(ele, length, eventEle, width) {
-        this.ele = document.querySelector(ele)
-        this._length = length
-        this.eventEle = document.querySelector(eventEle)
-        this.width = width
-    }
-    init() {
-        const t = this.ele.innerText
-        if (this.eventEle.innerWidth <= this.width) {
-            this.ele.innerText = hideText(t, this._length)
-        } else {
-            this.ele.innerText = t
-        }
-    }
-    start() {
-        window.addEventListener("resize", () => {
-            const t = this.ele.innerText
-            if (this.eventEle.innerWidth <= this.width) {
-                console.log(1);
-                this.ele.innerText = hideText(t, this._length)
-            } else {
-                this.ele.innerText = t
-            }
-        })
-    }
-}
-function hideText(str, length) {
-    return str.substr(0, length) + "..."
-}
 (() => {
     let itemAddWave = document.querySelectorAll(".item")
     itemAddWave.forEach(function (s) {
@@ -1077,7 +1047,7 @@ cursor:default;
         this.shadowRoot.append(style)
         this.shadowRoot.innerHTML += `<span class="ball"></span>`
         this.checked = this.getAttribute("checked") == "true" ? true : false
-        const io = new MutationObserver(() =>{
+        const io = new MutationObserver(() => {
             this.checked = this.getAttribute("checked") == "true" ? true : false
         })
         io.observe(this, { childList: true, attributes: true })
@@ -1300,6 +1270,23 @@ span {
     }
 }
 customElements.define("m-input", __mInput__)
+class __mTip__ extends HTMLElement {
+    constructor() {
+        super()
+    }
+    connectedCallback() {
+        const parent = this.parentElement
+        const { height } = this.getBoundingClientRect()
+        this.style.setProperty("--height", `${height}px`)
+        parent.addEventListener("mouseover", () => {
+            this.classList.add("show")
+        })
+        parent.addEventListener("mouseleave", () => {
+            this.classList.remove("show")
+        })
+    }
+}
+customElements.define("m-tip", __mTip__)
 /**
  * modal box
  * options:
@@ -1882,7 +1869,19 @@ class mAjax {
         } else {
             this.sended = true
             xhr.open(this.method, this.url)
-            xhr.send(JSON.stringify(this.data))
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+            var data = []
+            for (const key in this.data) {
+                data.push([
+                    key,
+                    this.data[key],
+                ])
+            }
+            var res = ""
+            for (const key in data) {
+                res += `${key != 0 ? "&" : ""}${data[key][0]}=${data[key][1]}`
+            }
+            xhr.send(res)
         }
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== 4) return

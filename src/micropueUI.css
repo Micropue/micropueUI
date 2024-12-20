@@ -1319,4 +1319,35 @@ m-window m-window-resize {
   bottom: 0;
   right: 0;
   cursor: nwse-resize;
+}
+
+m-tip {
+  --height: 30px;
+  position: absolute;
+  top: calc(100% - var(--height) / 2);
+  background-color: rgba(239, 239, 239, 0.568627451);
+  min-width: 100px;
+  min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+  -webkit-backdrop-filter: blur(30px);
+          backdrop-filter: blur(30px);
+  font-size: 12px;
+  color: gray;
+  transition: all 0.5s;
+  transform: scale(0.5);
+  transition-timing-function: cubic-bezier(0.31, 0, 0, 1.62);
+  opacity: 0;
+  box-shadow: 0px 10px 20px rgba(188, 188, 188, 0.4);
+}
+m-tip.show {
+  transform: scale(1);
+  top: 100%;
+  opacity: 1;
 }/*# sourceMappingURL=micropueUI.css.map */
