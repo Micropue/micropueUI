@@ -1287,6 +1287,49 @@ class __mTip__ extends HTMLElement {
     }
 }
 customElements.define("m-tip", __mTip__)
+class __mLoading__ extends HTMLElement {
+    constructor() {
+        super()
+        this.attachShadow({ mode: "open" })
+    }
+    connectedCallback() {
+        const style = document.createElement("style")
+        style.textContent = `
+        :host{position:fixed;
+        top:0;
+        left:0;
+        width:150px;
+        height:5px;
+        border-radius:30px;
+        background-color:var(--theme-color);
+        display:none;
+        }
+        :host([start]){
+        display:initial;
+        animation:m-loading-bar 3s linear infinite;
+        }
+        @keyframes m-loading-bar{
+        0%{
+        left:-150px;
+        width:50px;
+        }
+        50%{width:150px;}
+        100%{
+        left:100%;
+        width:50px;
+        }
+        }
+        `
+        this.shadowRoot.append(style)
+    }
+    start() {
+        this.setAttribute("start","")
+    }
+    end(){
+        this.removeAttribute("start")
+    }
+}
+customElements.define("m-loading", __mLoading__)
 /**
  * modal box
  * options:

@@ -1258,7 +1258,6 @@ m-popup {
     overflow: hidden;
     border: 3px solid var(--color);
     transition: margin-top 1s;
-
     @each $item in in out {
         &.#{$item} {
             animation: m-popup-#{$item} 1s cubic-bezier(0.44, 0, 0, 1.01) normal;
@@ -1580,6 +1579,10 @@ m-tip {
     $bgcolor: #efefef91;
     position: absolute;
     top: calc(100% - var(--height) / 2);
+    left:0;
+    right:0;
+    margin:auto;
+    width:fit-content;
     background-color: $bgcolor;
     min-width: 100px;
     min-height: 30px;

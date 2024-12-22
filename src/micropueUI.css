@@ -1325,6 +1325,11 @@ m-tip {
   --height: 30px;
   position: absolute;
   top: calc(100% - var(--height) / 2);
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: -moz-fit-content;
+  width: fit-content;
   background-color: rgba(239, 239, 239, 0.568627451);
   min-width: 100px;
   min-height: 30px;
