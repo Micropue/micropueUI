@@ -461,6 +461,9 @@ const GmicrantType = {
             { regex: /\[tipblock\](.*?)\[\/tipblock\]/g, replacement: '<div class="tipblock"><p>$1</p></div>' },
             { regex: /\[warnblock\](.*?)\[\/warnblock\]/g, replacement: '<div class="warnblock"><p>$1</p></div>' },
             { regex: /\[lcode\](.*?)\[\/lcode\]/g, replacement: '<span class="lblock">$1</span>' },
+            { regex: /\[mark\](.*?)\/(.*?)\[\/mark\]/g, replacement: '<span class="mark"><span class="mark-top">$1</span><hr /><span class="mark-bottom">$2</span></span>' },
+            { regex: /\[math\](.*?)\[\/math\]/g, replacement: '<span class="math">$1</span>' },
+            { regex: /\[pow:(.*?)\](.*?)\[\/pow\]/g, replacement: '<span class="pow">$2<sup>$1</sup></span>' },
             {
                 regex: /\[code\](.*?)\[\/code\]/gs, replacement: (match, text) => {
                     text = text.replace(/<br>/gs, "\n")
@@ -537,6 +540,9 @@ const GmicrantType = {
             { regex: /<m-td>(.*?)<\/m-td>/gs, replacement: '[td]$1[/td]' },
             { regex: /<a href="https:\/\/micropue\.com\.cn\/url\?refresh=.*?" target="_blank">(.*?)<\/a>/g, replacement: '[link]$1[/link]' },
             { regex: /<span style="color:([#a-zA-Z0-9]+);">(.*?)<\/span>/g, replacement: '[color:$1]$2[/color]' },
+            { regex: /<span class="mark"><span class="mark-top">(.*?)<\/span><hr \/><span class="mark-bottom">(.*?)<\/span><\/span>/g, replacement: '[mark]$1/$2[/mark]' },
+            { regex: /<span class="math">(.*?)<\/span>/g, replacement: '[math]$1[/math]' },
+            { regex: /<span class="pow">(.*?)<sup>(.*?)<\/sup><\/span>/g, replacement: '[pow:$2]$1[/pow]' },
             {
                 regex: /<span style="font-size:(\d+)px;">(.*?)<\/span>/g,
                 replacement: (match, size, text) => {
@@ -599,7 +605,10 @@ class BuiltGmicrantType {
             ['link', '链接'],
             ['color', '字体颜色*'],
             ['size', '字体大小*'],
-            ['highlight', '高亮']
+            ['highlight', '高亮'],
+            ['mark','分数'],
+            ['math', '公式'],
+            ['pow', '次方']
         ]
         this.input
         this.output
@@ -667,6 +676,9 @@ class BuiltGmicrantType {
                     break
                 case 'size':
                     this.input.insertFromSelection(c.s, c.e, ['[size:]', '[/size]'])
+                    break
+                case 'pow':
+                    this.input.insertFromSelection(c.s, c.e, ['[pow:]', '[/pow]'])
                     break
                 default:
                     this.input.insertFromSelection(c.s, c.e, [`[${option}]`, `[/${option}]`])
@@ -1323,9 +1335,9 @@ class __mLoading__ extends HTMLElement {
         this.shadowRoot.append(style)
     }
     start() {
-        this.setAttribute("start","")
+        this.setAttribute("start", "")
     }
-    end(){
+    end() {
         this.removeAttribute("start")
     }
 }
@@ -1410,7 +1422,7 @@ class mModalBox {
             ele.style.display = "none"
             this.is_opening = false
             ele.setAttribute("mui-isopen", "false")
-        }, 800)
+        }, 600)
     }
     logout() {
         const ele = document.querySelector(`[mui-uid=${this.uid}]`)
