@@ -461,9 +461,11 @@ const GmicrantType = {
             { regex: /\[tipblock\](.*?)\[\/tipblock\]/g, replacement: '<div class="tipblock"><p>$1</p></div>' },
             { regex: /\[warnblock\](.*?)\[\/warnblock\]/g, replacement: '<div class="warnblock"><p>$1</p></div>' },
             { regex: /\[lcode\](.*?)\[\/lcode\]/g, replacement: '<span class="lblock">$1</span>' },
-            { regex: /\[mark\](.*?)\/(.*?)\[\/mark\]/g, replacement: '<span class="mark"><span class="mark-top">$1</span><hr /><span class="mark-bottom">$2</span></span>' },
+            { regex: /\[frac\](.*?)\\(.*?)\[\/frac\]/g, replacement: '<span class="frac"><span class="frac-top">$1</span><hr><span class="frac-bottom">$2</span></span>' },
             { regex: /\[math\](.*?)\[\/math\]/g, replacement: '<span class="math">$1</span>' },
             { regex: /\[pow:(.*?)\](.*?)\[\/pow\]/g, replacement: '<span class="pow">$2<sup>$1</sup></span>' },
+            { regex: /\[sqrt:(.*?)\](.*?)\[\/sqrt\]/g, replacement: '<span class="sqrt"><sup>$1</sup>√<span class="sqrt-content">$2</span></span>' },
+            { regex: /\[sub:(.*?)\](.*?)\[\/sub\]/g, replacement: '<span class="sub">$2<sub>$1</sub></span>' },
             {
                 regex: /\[code\](.*?)\[\/code\]/gs, replacement: (match, text) => {
                     text = text.replace(/<br>/gs, "\n")
@@ -540,9 +542,11 @@ const GmicrantType = {
             { regex: /<m-td>(.*?)<\/m-td>/gs, replacement: '[td]$1[/td]' },
             { regex: /<a href="https:\/\/micropue\.com\.cn\/url\?refresh=.*?" target="_blank">(.*?)<\/a>/g, replacement: '[link]$1[/link]' },
             { regex: /<span style="color:([#a-zA-Z0-9]+);">(.*?)<\/span>/g, replacement: '[color:$1]$2[/color]' },
-            { regex: /<span class="mark"><span class="mark-top">(.*?)<\/span><hr \/><span class="mark-bottom">(.*?)<\/span><\/span>/g, replacement: '[mark]$1/$2[/mark]' },
+            { regex: /<span class="frac"><span class="frac-top">(.*?)<\/span><hr><span class="frac-bottom">(.*?)<\/span><\/span>/g, replacement: "[frac]$1\\$2[/frac]" },
             { regex: /<span class="math">(.*?)<\/span>/g, replacement: '[math]$1[/math]' },
             { regex: /<span class="pow">(.*?)<sup>(.*?)<\/sup><\/span>/g, replacement: '[pow:$2]$1[/pow]' },
+            { regex: /<span class="sub">(.*?)<sub>(.*?)<\/sub><\/span>/g, replacement: '[sub:$2]$1[/sub]' },
+            { regex: /<span class="sqrt"><sup>(.*?)<\/sup>√<span class="sqrt-content">(.*?)<\/span><\/span>/g, replacement: '[sqrt:$2]$1[/sqrt]' },
             {
                 regex: /<span style="font-size:(\d+)px;">(.*?)<\/span>/g,
                 replacement: (match, size, text) => {
@@ -606,9 +610,11 @@ class BuiltGmicrantType {
             ['color', '字体颜色*'],
             ['size', '字体大小*'],
             ['highlight', '高亮'],
-            ['mark','分数'],
+            ['frac', '分数'],
             ['math', '公式'],
-            ['pow', '次方']
+            ['pow', '次方'],
+            ['sqrt', '根式'],
+            ['sub', '下角标'],
         ]
         this.input
         this.output
@@ -679,6 +685,12 @@ class BuiltGmicrantType {
                     break
                 case 'pow':
                     this.input.insertFromSelection(c.s, c.e, ['[pow:]', '[/pow]'])
+                    break
+                case 'sqrt':
+                    this.input.insertFromSelection(c.s, c.e, ['[sqrt:]', '[/sqrt]'])
+                    break
+                case 'sub':
+                    this.input.insertFromSelection(c.s, c.e, ['[sub:]', '[/sub]'])
                     break
                 default:
                     this.input.insertFromSelection(c.s, c.e, [`[${option}]`, `[/${option}]`])

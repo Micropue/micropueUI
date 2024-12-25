@@ -609,7 +609,26 @@ m-lhr {
   font-size: 10px;
 }
 
-.mark {
+.sub sub {
+  font-size: 10px;
+}
+
+.sqrt sup {
+  font-size: 10px;
+}
+.sqrt .sqrt-content {
+  position: relative;
+}
+.sqrt .sqrt-content::before {
+  content: "";
+  border-top: 1px solid black;
+  top: 0.5px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.frac {
   display: inline-flex;
   flex-direction: column;
   width: -moz-fit-content;
@@ -618,7 +637,7 @@ m-lhr {
   justify-content: center;
   align-items: center;
 }
-.mark hr {
+.frac hr {
   border: none;
   height: 1px;
   width: 90%;
@@ -626,10 +645,12 @@ m-lhr {
 }
 
 .math {
-  font-family: "Times New Roman", Times, serif;
   font-style: italic;
   display: inline-flex;
   align-items: center;
+}
+.math, .math * {
+  font-family: "Times New Roman", Times, serif;
 }
 
 .live-scrollbar {
