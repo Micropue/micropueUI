@@ -1927,7 +1927,7 @@ class mAjax {
                     times++
                 }
                 for (const i of data) {
-                    uri += i[0] + i[1] + "=" + i[2]
+                    uri += i[0] + encodeURIComponent(i[1]) + "=" + encodeURIComponent(i[2])
                 }
             }
             xhr.open(this.method, uri)
@@ -1946,7 +1946,7 @@ class mAjax {
             }
             var res = ""
             for (const key in data) {
-                res += `${key != 0 ? "&" : ""}${data[key][0]}=${data[key][1]}`
+                res += `${key != 0 ? "&" : ""}${decodeURIComponent(data[key][0])}=${encodeURIComponent(data[key][1])}`
             }
             xhr.send(res)
         }
