@@ -27,10 +27,14 @@
   margin: 0;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   cursor: default;
   display: flex;
-  height: calc(100vh - env(safe-area-inset-bottom));
+  height: 100%;
   width: 100%;
   background-color: var(--bgcolor);
   overflow: hidden;
