@@ -1946,7 +1946,7 @@ class mAjax {
             }
             var res = ""
             for (const key in data) {
-                res += `${key != 0 ? "&" : ""}${decodeURIComponent(data[key][0])}=${encodeURIComponent(data[key][1])}`
+                res += `${key != 0 ? "&" : ""}${encodeURIComponent(data[key][0])}=${encodeURIComponent(data[key][1])}`
             }
             xhr.send(res)
         }
